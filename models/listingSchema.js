@@ -18,6 +18,9 @@ const listingSchema = new mongoose.Schema(
     uplodImages: {
       type: [String],
     },
+    uplodVideos: {
+      type: [String],
+    },
     priceList: {
       type: [String],
     },
@@ -26,6 +29,8 @@ const listingSchema = new mongoose.Schema(
     seatingCapacity: String,
     services: String,
     rentalType: String,
+    cabSeaterCapacity: String,
+    rating: String,
     brands: String,
   },
   { timestamps: true }

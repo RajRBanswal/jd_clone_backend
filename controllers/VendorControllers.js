@@ -56,12 +56,18 @@ exports.vendorLogin = async (req, res) => {
 exports.addListing = async (req, res) => {
   try {
     let files = [];
-    const image = req.files || [];
+    let videos = [];
+    // const image = req.files || [];
+    const image = req.files["uplodImages"] || [];
+    const video = req.files["uplodVideo"] || [];
     // Collect image filenames
     for (let i = 0; i < image.length; i++) {
       files.push(image[i].filename);
     }
-    console.log(req.files);
+    // Collect image filenames
+    for (let i = 0; i < video.length; i++) {
+      videos.push(video[i].filename);
+    }
 
     const result = await Listings.create({
       adminName: req.body.adminName || "",
@@ -78,13 +84,16 @@ exports.addListing = async (req, res) => {
       openingHour: req.body.openingHour,
       yearOfExperience: req.body.yearOfExperience,
       uplodImages: files,
+      uplodVideos: videos,
       priceList: req.body.priceList,
       segment: req.body.segment,
       packagesOffered: req.body.packagesOffered,
       seatingCapacity: req.body.seatingCapacity,
       services: req.body.services,
       rentalType: req.body.rentalType,
+      cabSeaterCapacity: req.body.cabSeaterCapacity,
       brands: req.body.brands,
+      rating: "3.0",
     });
 
     if (result) {

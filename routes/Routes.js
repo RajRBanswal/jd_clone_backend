@@ -1,5 +1,9 @@
 const express = require("express");
-const { userRegistration } = require("../controllers/UserControler");
+const {
+  userRegistration,
+  usersLogin,
+  getUsers,
+} = require("../controllers/UserControler");
 const { getAllTalukas } = require("../controllers/SettingsControllers");
 const {
   vendorRegistration,
@@ -37,7 +41,7 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB file size limit
   fileFilter: function (req, file, cb) {
     // Accept only image files (you can customize this if needed)
-    const filetypes = /jpeg|jpg|png|gif/;
+    const filetypes = /jpeg|jpg|png|gif|mp4|avi|mov|wmv|flv|mkv|webm/;
     const extname = filetypes.test(
       path.extname(file.originalname).toLowerCase()
     );
@@ -51,7 +55,9 @@ const upload = multer({
   },
 });
 
-router.post("/api/user-registration", userRegistration);
+router.post("/api/users/user-registration", userRegistration);
+router.post("/api/users/user-login", usersLogin);
+router.get("/api/users/:id", getUsers);
 
 router.get("/api/admin/all-talukas", getAllTalukas);
 
@@ -60,7 +66,11 @@ router.post("/api/vendor/vendor-registration", vendorRegistration);
 router.post("/api/vendor/vendor-login", vendorLogin);
 router.post(
   "/api/vendor/add-listing",
-  upload.array("uplodImages", 5),
+  upload.fields([
+    { name: "uplodImages", maxCount: 20 }, // Allow up to 5 images
+    { name: "uplodVideo", maxCount: 5 }, // Allow a single PDF file
+  ]),
+
   addListing
 );
 router.get("/api/admin/all-listing", getListing);
